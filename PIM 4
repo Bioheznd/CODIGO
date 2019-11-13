@@ -11,10 +11,11 @@
 #define MAX_PRESENTATIONS 1
 
 int seatArray[MAX_SEAT_ROWS][SEATS_PER_ROW];
-int rowNumber, seatNumber, ticketValue, showDate;
+int rowNumber, seatNumber, ticketValue;
+String presentationDate;
 int ticketPrice = 30;
 
-int main(int argc, char *argv[], char) {
+int main(int argc, char *argv[]) {
 	int presentation;
 	int dayOfWeek;
 	
@@ -34,7 +35,7 @@ int main(int argc, char *argv[], char) {
 		}
 	}
 
-	switch(seletorpeca) {
+	switch(presentation) {
 		case 1:
 			printf("Peça selecionada: Espetáculo teatral Corpo de Dor.\n");
 			printf("Preço R$ %d\n", ticketPrice);
@@ -62,26 +63,28 @@ int main(int argc, char *argv[], char) {
 	
 	switch(dayOfWeek) {
 		case 1:
-			printf("Domingo 01-Dez-2019\n");
+			presentationDate = "Domingo 01-Dez-2019\n";
 			break;
 		case 2:
-			printf("Segunda-feira 02-Dez-2019\n");
+			presentationDate = "Segunda-feira 02-Dez-2019\n";
 			break;
 	    case 3:
-			printf("Terça-feira 03-Dez-2019\n");
+			presentationDate = "Terça-feira 03-Dez-2019\n";
 			break;
 		case 4: 
-			printf("Quarta-feira 04-Dez-2019\n");
+			presentationDate = "Quarta-feira 04-Dez-2019\n";
 			break;
 		case 5: 
-			printf("Quinta-feira 05-Dez-2019\n");
+			presentationDate = "Quinta-feira 05-Dez-2019\n";
 			break;
 		case 6: 
-			printf("Sexta-feira 06-Dez-2019\n");
+			presentationDate = "Sexta-feira 06-Dez-2019\n";
 			break;
 		case 7: 
-			printf("Sábado 07-Dez-2019\n");
+			presentationDate = "Sábado 07-Dez-2019\n";
+			break;
 	}
+	printf(presentationDate);
 	printf("\n");
 	
 	if(dayOfWeek == 3) {
@@ -243,7 +246,7 @@ void printTicket() {
 	printf("Poltrona %d\n", seatNumber);
 	printf("Valor do ingresso %d\n", ticketValue);
 	printf("\n");
-	printf("Data %d\n", showDate);
+	printf("Data "+presentationDate);
 }
 
 
