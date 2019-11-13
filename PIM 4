@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
 		
 		if(presentation > MAX_PRESENTATIONS) {
 			printf("\n");
-			printf("NÃO DISPONÍVEL\n")
+			printf("NÃO DISPONÍVEL\n");
 			printf("\n");
 		} else {
 			break;
