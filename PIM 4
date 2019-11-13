@@ -15,7 +15,7 @@ int rowNumber, seatNumber, ticketValue;
 String presentationDate;
 int ticketPrice = 30;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[], char args) {
 	int presentation;
 	int dayOfWeek;
 	
