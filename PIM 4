@@ -14,7 +14,7 @@ int seatArray[MAX_SEAT_ROWS][SEATS_PER_ROW];
 int rowNumber, seatNumber, ticketValue, showDate;
 int ticketPrice = 30;
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[], char) {
 	int presentation;
 	int dayOfWeek;
 	
