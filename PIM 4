@@ -12,13 +12,27 @@
 
 int seatArray[MAX_SEAT_ROWS][SEATS_PER_ROW];
 int rowNumber, seatNumber, ticketValue;
-String presentationDate;
-int ticketPrice = 30;
+int presentation, dayOfWeek, ticketPrice;
+String presentationDate, presentationName;
 
 int main(int argc, char *argv[], char args) {
-	int presentation;
-	int dayOfWeek;
+	choosePresentation();
+	showPresentationInfo();
 	
+	choosePresentationDate();
+	showPresentationDateInfo();
+	
+	askForBenefits();
+	
+	showTicketPrice();
+	
+	showOptions();
+	
+	system("PAUSE");
+    return 0;
+}
+
+void choosePresentation() {
 	while(true) {
 		printf("Escolha a peça entre as opções abaixo\n");
 		printf("\n");
@@ -26,75 +40,69 @@ int main(int argc, char *argv[], char args) {
 		printf("\n");
 		scanf("%d", &presentation);
 		
-		if(presentation > MAX_PRESENTATIONS) {
-			printf("\n");
-			printf("NÃO DISPONÍVEL\n");
-			printf("\n");
-		} else {
+		if(isPresentationInRange()) {
+			setPresentationName();
+			setTicketPrice();
 			break;
+		} else {
+			printf("\n");
+			printf("Peça inexistente.\n");
+			printf("\n");
 		}
 	}
+}
 
-	switch(presentation) {
-		case 1:
-			printf("Peça selecionada: Espetáculo teatral Corpo de Dor.\n");
-			printf("Preço R$ %d\n", ticketPrice);
-			break;
-	}
+void showPresentationInfo() {
+	printf("Espetáculo teatral %c\n", presentationName);
+	printf("Preço R$ %d\n", ticketPrice);
 	printf("\n");
-	
-	printf("Digite o número referente ao dia da semana que deseja comprar\n");
-	printf("\n");
-	printf("|~~~~~~~~~~~~~~~~~~~~~~~~~~~~|\n");
-	printf("| 1 - Domingo    01-Dez-2019 |\n");
-	printf("| 2 - Segunda    02-Dez-2019 |\n");
-	printf("| 3 - Terça      03-Dez-2019 |\n");
-	printf("| 4 - Quarta     04-Dez-2019 |\n");
-	printf("| 5 - Quinta     05-Dez-2019 |\n");
-	printf("| 6 - Sexta      06-Dez-2019 |\n");
-	printf("| 7 - Sábado     07-Dez-2019 |\n");
-	printf("|____________________________|\n");
-	scanf("%d", &dayOfWeek);
-	
-	while(dayOfWeek > 7) {
-		printf("Escolha um dia da semana válido!\n");
+}
+
+void choosePresentationDate() {
+	while(true) {
+		printf("Digite o número referente ao dia da semana que deseja comprar\n");
+		printf("\n");
+		printf("|~~~~~~~~~~~~~~~~~~~~~~~~~~~~|\n");
+		printf("| 1 - Domingo    01-Dez-2019 |\n");
+		printf("| 2 - Segunda    02-Dez-2019 |\n");
+		printf("| 3 - Terça      03-Dez-2019 |\n");
+		printf("| 4 - Quarta     04-Dez-2019 |\n");
+		printf("| 5 - Quinta     05-Dez-2019 |\n");
+		printf("| 6 - Sexta      06-Dez-2019 |\n");
+		printf("| 7 - Sábado     07-Dez-2019 |\n");
+		printf("|____________________________|\n");
 		scanf("%d", &dayOfWeek);
+		
+		if(isDayOfWeekInRange()) {
+			setPresentationDate();
+			break;
+		} else {
+			printf("Escolha um dia da semana válido!\n");
+			printf("\n");
+		}
 	}
-	
-	switch(dayOfWeek) {
-		case 1:
-			presentationDate = "Domingo 01-Dez-2019\n";
-			break;
-		case 2:
-			presentationDate = "Segunda-feira 02-Dez-2019\n";
-			break;
-	    case 3:
-			presentationDate = "Terça-feira 03-Dez-2019\n";
-			break;
-		case 4: 
-			presentationDate = "Quarta-feira 04-Dez-2019\n";
-			break;
-		case 5: 
-			presentationDate = "Quinta-feira 05-Dez-2019\n";
-			break;
-		case 6: 
-			presentationDate = "Sexta-feira 06-Dez-2019\n";
-			break;
-		case 7: 
-			presentationDate = "Sábado 07-Dez-2019\n";
-			break;
-	}
+}
+
+void showPresentationDateInfo() {
 	printf(presentationDate);
 	printf("\n");
-	
-	if(dayOfWeek == 3) {
+}
+
+void askForBenefits() {
+	if(isTuesday()) {
 		askForGratuityBenefit();
 	} else {
 		askForHalfEntranceBenefit();
 	}
-	
+}
+
+void showTicketPrice() {
 	printf("O valor do ingresso é R$ %d\n", ticketPrice);
 	printf("\n");
+}
+
+void showOptions() {
+	int option;
 	
 	while(true) {
 		printf("\n");
@@ -102,9 +110,9 @@ int main(int argc, char *argv[], char args) {
 		printf("1 - Escolher Poltrona");
 		printf("2 - Mostrar mapa de ocupação");
 		printf("3 - Imprimir Ticket");
-		scanf("%d", &opcao);
+		scanf("%d", &option);
 		
-		switch(opcao) {
+		switch(option) {
 			case 1:
 				chooseSeat();
                 break;
@@ -112,13 +120,10 @@ int main(int argc, char *argv[], char args) {
 				showSeatMap();
                 break;
 			case 3:
-				printTicket();
+				showTicket();
                 break;
 		}                                                      
 	}
-	
-	system("PAUSE");
-    return 0;
 }
 
 void askForGratuityBenefit() {
@@ -188,34 +193,6 @@ void chooseSeat() {
 	}
 }
 
-bool isTheaterFull() {
-	int ocupedSeats = 0;
-	
-	for(int seatRow[] : seatArray) {
-		for(int seat : seatRow) {
-			ocupedSeats++;
-		}
-	}
-	
-	return ocupedSeats < (MAX_SEAT_ROWS * SEATS_PER_ROW);
-}
-
-bool isSeatSelectedFree() {
-	return seatArray[rowNumber-1][seatNumber-1] == 0;
-}
-
-void acceptPaymentOrder() {
-	seatArray[rowNumber-1][seatNumber-1] = 1;
-	
-	printf("\n");
-	printf("Venda da poltrona %d - %d efetivada.\n", rowNumber, seatNumber);
-}
-
-void recusePaymentOrder() {
-	printf("\n");
-	printf("A poltrona %d - %d já está ocupada.\n", rowNumber, seatNumber);
-}
-
 void showSeatMap() {
 	for(int i = 0; i < MAX_SEAT_ROWS; i++) {
 		int seatRow[] = seatArray[i];
@@ -234,19 +211,101 @@ void showSeatMap() {
 	}
 }
 
-bool isSeatFree(int seat) {
-	return seat == 0;
-}
-
-void printTicket() {
+void showTicket() {
 	printf("\n");
-	printf("Ticket do Espetáculo Teatral Corpo de Dor\n");
+	printf("Ticket do Espetáculo Teatral %c\n", presentationName);
 	printf("\n");
 	printf("Fileira %d\n", rowNumber);
 	printf("Poltrona %d\n", seatNumber);
 	printf("Valor do ingresso %d\n", ticketValue);
 	printf("\n");
-	printf("Data "+presentationDate);
+	printf("Data %c\n", presentationDate);
+}
+
+void acceptPaymentOrder() {
+	seatArray[rowNumber-1][seatNumber-1] = 1;
+	
+	printf("\n");
+	printf("Venda da poltrona %d - %d efetivada.\n", rowNumber, seatNumber);
+}
+
+void recusePaymentOrder() {
+	printf("\n");
+	printf("A poltrona %d - %d já está ocupada.\n", rowNumber, seatNumber);
+}
+
+void setPresentationName() {
+	switch(presentation) {
+		case 1:
+			presentationName = "Corpo de Dor";
+			break;
+	}
+}
+
+void setTicketPrice() {
+	switch(presentation) {
+		case 1:
+			ticketPrice = 30;
+			break;
+	}
+}
+
+void setPresentationDate() {
+	switch(dayOfWeek) {
+		case 1:
+			presentationDate = "Domingo 01-Dez-2019";
+			break;
+		case 2:
+			presentationDate = "Segunda-feira 02-Dez-2019";
+			break;
+	    case 3:
+			presentationDate = "Terça-feira 03-Dez-2019";
+			break;
+		case 4: 
+			presentationDate = "Quarta-feira 04-Dez-2019";
+			break;
+		case 5: 
+			presentationDate = "Quinta-feira 05-Dez-2019";
+			break;
+		case 6: 
+			presentationDate = "Sexta-feira 06-Dez-2019";
+			break;
+		case 7: 
+			presentationDate = "Sábado 07-Dez-2019";
+			break;
+	}
+}
+
+bool isPresentationInRange() {
+	return presentation > 0 && presentation <= MAX_PRESENTATIONS;
+}
+
+bool isDayOfWeekInRange() {
+	return dayOfWeek > 0 && dayOfWeek <= 7
+}
+
+bool isTuesday() {
+	return dayOfWeek == 3;
+}
+
+bool isSeatSelectedFree() {
+	return seatArray[rowNumber-1][seatNumber-1] == 0;
+}
+
+bool isTheaterFull() {
+	int ocupedSeats = 0;
+	
+	for(int seatRow[] : seatArray) {
+		for(int seat : seatRow) {
+			ocupedSeats++;
+		}
+	}
+	
+	return ocupedSeats < (MAX_SEAT_ROWS * SEATS_PER_ROW);
+}
+
+bool isSeatFree(int seat) {
+	return seat == 0;
 }
 
 
