@@ -12,9 +12,9 @@
 
 int seatArray[MAX_SEAT_ROWS][SEATS_PER_ROW];
 int rowNumber, seatNumber;
-int presentation, dayOfWeek, ticketPrice;;
+int presentation, dayOfWeek, ticketPrice;
 int halfEntranceReason;
-const char *presentationDate, *presentationName
+const char *presentationDate, *presentationName;
 
 void choosePresentation();
 void showPresentationInfo();
@@ -36,6 +36,9 @@ void chooseSeat();
 void showSeatMap();
 void showTicket();
 
+void chooseSeatRowNumber();
+void chooseSeatNumber();
+void verifyPaymentOrder();
 void acceptPaymentOrder();
 void recusePaymentOrder();
 
@@ -239,33 +242,7 @@ void chooseSeat() {
 		printf("\n");
 		printf("Teatro lotado.\n");
 	} else {
-		do {
-			printf("\n");
-			printf("Escolha sua fileira\n");
-			scanf("%d", &rowNumber);
-			
-			if(isRowNumberInRange()) {
-				do {
-					printf("\n");
-					printf("Número da poltrona (1 à 24)\n");
-					scanf("%d", &seatNumber);
-					
-					if(isSeatNumberInRange()) {
-						if(isSeatSelectedFree()) {
-							acceptPaymentOrder();
-						} else {
-							recusePaymentOrder();
-						}
-					} else {
-						printf("Assento inexistente\n");
-						printf("\n");
-					}
-				} while(!isSeatNumberInRange());
-			} else {
-				printf("Fileira inexistente\n");
-				printf("\n");
-			}
-		} while(!isRowNumberInRange());
+		chooseSeatRowNumber();
 	}
 }
 
@@ -296,6 +273,44 @@ void showTicket() {
 	printf("\n");
 	printf("Data %s\n", presentationDate);
 	printf("\n");
+}
+
+void chooseSeatRowNumber() {
+	do {
+		printf("\n");
+		printf("Escolha sua fileira\n");
+		scanf("%d", &rowNumber);
+		
+		if(isRowNumberInRange()) {
+			chooseSeatNumber();
+		} else {
+			printf("Fileira inexistente\n");
+			printf("\n");
+		}
+	} while(!isRowNumberInRange());
+}
+
+void chooseSeatNumber() {
+	do {
+		printf("\n");
+		printf("Número da poltrona (1 à 24)\n");
+		scanf("%d", &seatNumber);
+		
+		if(isSeatNumberInRange()) {
+			verifyPaymentOrder();
+		} else {
+			printf("Assento inexistente\n");
+			printf("\n");
+		}
+	} while(!isSeatNumberInRange());
+}
+
+void verifyPaymentOrder() {
+	if(isSeatSelectedFree()) {
+		acceptPaymentOrder();
+	} else {
+		recusePaymentOrder();
+	}
 }
 
 void acceptPaymentOrder() {
