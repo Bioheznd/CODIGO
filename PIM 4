@@ -1,346 +1,407 @@
+
 #include <stdio.h>
 #include <stdlib.h>
-#include <locale.h>
 #include <stdbool.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdbool.h>
 
+#define MAX_SEAT_ROWS 2
+#define SEATS_PER_ROW 24
+#define MAX_PRESENTATIONS 1
 
+int seatArray[MAX_SEAT_ROWS][SEATS_PER_ROW];
+int rowNumber, seatNumber;
+int presentation, dayOfWeek, ticketPrice;;
+int halfEntranceReason;
+const char *presentationDate, *presentationName
 
-	int assentoFrente[24] = {0,0,0,0,0,0, 0,0,0,0,0,0, 0,0,0,0,0,0, 0,0,0,0,0,0};
-    int assentoFundo[24] = {0,0,0,0,0,0, 0,0,0,0,0,0, 0,0,0,0,0,0, 0,0,0,0,0,0};
-    int opcao, numero, lotado = 0;
-    
+void choosePresentation();
+void showPresentationInfo();
+void choosePresentationDate();
+void showPresentationDateInfo();
+void askForBenefits();
+void showTicketPrice();
+void showOptions();
 
+void setPresentationName();
+void setTicketPrice();
 
+void setPresentationDate();
 
+void askForGratuityBenefit();
+void askForHalfEntranceBenefit();
 
+void chooseSeat();
+void showSeatMap();
+void showTicket();
 
+void acceptPaymentOrder();
+void recusePaymentOrder();
 
-int main(int argc, char *argv[], char)
+bool isPresentationInRange();
+bool isDayOfWeekInRange();
+bool isTuesday();
+bool isOptionInRange(int option);
+bool isGratuityBenefitInRange(int haveGratuityBenefit);
+bool isHalfEntranceBenefitInRange(int haveHalfEntranceBenefit);
+bool isRowNumberInRange();
+bool isSeatNumberInRange();
+bool isSeatSelectedFree();
+bool isTheaterFull();
+bool isSeatOcuped(int seat);
 
-{  
-		setlocale(LC_ALL,"Portuguese");
-
-	int polescolhida[10];
-	int seletorpeca,meiaentrada,gratuidade,comandosair,motivomeiabolsa;
-	int poltronas[10];
-	int valoringresso=30;
-	bool s,n=true;
-	int i, data,sem;
-	char domingo[]={"01-12-19"},segunda[]={"02-12-19"},k;
+int main(int argc, char *argv[], char *args[]) {
+	choosePresentation();
+	showPresentationInfo();
 	
-    
-    
-    
-    printf("Escolha a peça entre as opções abaixo:\n\n(1) Espetáculo Teatral Corpo de Dor\n");
-    scanf("%d", &seletorpeca);
-    printf ("Valores dos ingressos para a peça: Espetáculo teatral corpo de dor.\nINTEIRA: R$ %d\nMEIA: R$ %d\n", valoringresso, valoringresso/2);
-    
-
-while (seletorpeca>1) {
-        seletorpeca++;
-           printf ("NÃO DISPONÍVEL\n\nEscolha a peÃ§a entre as opções abaixo:\n\n(1) Espetáculo Teatral Corpo de Dor\n\n");
-           scanf("%d", &seletorpeca);
-        }
-
-    switch (seletorpeca) {
-    case 1:
-        printf ("Peça selecionada: Espetáculo teatral corpo de dor.\n\n");
-        break;
-         }
-   
-  //Selecionar dia da semana
+	choosePresentationDate();
+	showPresentationDateInfo();
 	
-	printf("-Digite o número referente ao dia da semana que deseja comprar\n\n");
-	printf("|~~~~~~~~~~~~~~~~~~~~~~~~~~~~|\n");
-	printf("| 1 - Domingo    01-Dez-2019 |\n| 2 - Segunda    02-Dez-2019 |\n| 3 - Terça      03-Dez-2019 |\n| 4 - Quarta     04-Dez-2019 |\n| 5 - Quinta     05-Dez-2019 |\n| 6 - Sexta      06-Dez-2019 |\n| 7 - Sábado     07-Dez-2019 |\n");
-	printf("|____________________________|\n");
-	scanf("%d", &sem);
+	askForBenefits();
 	
-	while (sem>7){
-    
-    printf("Escolha um dia da semana válido!\n");
-    scanf("%d", &sem);
-    
-	}
+	showTicketPrice();
 	
-	switch(sem)
-	{
-		case 1:
-	printf ("Domingo 01-Dez-2019\n\n");
+	showOptions();
 	
-	
-	printf ("\n\nO cliente possui benefício de meia entrada (1 - sim / 2 - nao) ?\n"); 
-scanf ("%d", &meiaentrada);
-        
-    switch (meiaentrada) 
-    {
-    case 1:
-        printf ("Sim.\nInsira o movito:\n(Não se esqueça de solicitar a documentação)");
-        printf ("\n\n(1) Maior de 60 anos\n\n(2)Professore da rede pÃºblica de ensino\n\n(3)CrianÃ§a de 02 a 12 anos\n\n\(4)Estudante\n");
-        scanf ("%d", &motivomeiabolsa);
-        valoringresso=valoringresso/2;
-        printf ("O valor do ingresso é: R$ %d\n\n", valoringresso);
-        break;
-        
-    case 2:
-        printf ("Não.\nprosseguindo...\n\n");
-                printf ("O valor do ingresso é: R$ %d\n\n", valoringresso);
-
-               break;
-    }
-		case 2:
-	printf ("Segunda 02-Dez-2019\n\n");
-	
-	printf ("\n\nO cliente possui benefício de meia entrada (1 - sim / 2 - nao) ?\n"); 
-scanf ("%d", &meiaentrada);
-        
-    switch (meiaentrada) 
-    {
-    case 1:
-        printf ("Sim.\nInsira o movito:\n(Não se esqueça de solicitar a documentação)");
-        printf ("\n\n(1) Maior de 60 anos\n\n(2)Professore da rede pÃºblica de ensino\n\n(3)CrianÃ§a de 02 a 12 anos\n\n\(4)Estudante\n");
-        scanf ("%d", &motivomeiabolsa);
-        valoringresso=valoringresso/2;
-        printf ("O valor do ingresso é: R$ %d\n\n", valoringresso);
-        break;
-        
-    case 2:
-        printf ("Não.\nprosseguindo...\n\n");
-                        printf ("O valor do ingresso é: R$ %d\n\n", valoringresso);
-               break;
-    }
-		
-		
-		case 3:
-	printf ("Terça-feira 03-Dez-2019\n\n");
-	printf ("O cliente possui benefício de Gratuidade de Ingresso? (1 - sim / 2 - nao)\n\n"); 
-		scanf ("%d", &gratuidade);
-		
-        
-    switch (gratuidade) 
-    {
-    case 1:
-        printf ("OK, Benefício da GRATUIDADE foi aplicado.\n\nO VALOR DO INGRESSO É R$ %d\n\n",(valoringresso-valoringresso) );
-        valoringresso=0;
-        break;
-        
-    case 2:
-        printf ("Não.\nprosseguindo...\n\nO VALOR DO INGRESSO É: R$ %d\n\n", valoringresso);
-        
-        printf ("\n\nO cliente possui benefício de meia entrada (1 - sim / 2 - nao) ?\n"); 
-scanf ("%d", &meiaentrada);
-        
-    switch (meiaentrada) 
-    {
-    case 1:
-        printf ("Sim.\nInsira o movito:\n(Não se esqueça de solicitar a documentação)");
-        printf ("\n\n(1) Maior de 60 anos\n\n(2)Professore da rede pÃºblica de ensino\n\n(3)CrianÃ§a de 02 a 12 anos\n\n\(4)Estudante\n");
-        scanf ("%d", &motivomeiabolsa);
-        valoringresso=valoringresso/2;
-        printf ("O valor do ingresso é: R$ %d\n\n", valoringresso);
-        break;
-        
-    case 2:
-        printf ("Não.\nprosseguindo...\n\n");
-                        printf ("O valor do ingresso é: R$ %d\n\n", valoringresso);
-               break;
-    }
-        
-    }
-
-
-
-
-		case 4: 
-	printf ("Quarta-feira 04-Dez-2019\n\n");
-		printf ("\n\nO cliente possui benefício de meia entrada (1 - sim / 2 - nao) ?\n"); 
-scanf ("%d", &meiaentrada);
-        
-    switch (meiaentrada) 
-    {
-    case 1:
-        printf ("Sim.\nInsira o movito:\n(Não se esqueça de solicitar a documentação)");
-        printf ("\n\n(1) Maior de 60 anos\n\n(2)Professore da rede pÃºblica de ensino\n\n(3)CrianÃ§a de 02 a 12 anos\n\n\(4)Estudante\n");
-        scanf ("%d", &motivomeiabolsa);
-        valoringresso=valoringresso/2;
-        printf ("O valor do ingresso é: R$ %d\n\n", valoringresso);
-        break;
-        
-    case 2:
-        printf ("Não.\nprosseguindo...\n\n");
-                        printf ("O valor do ingresso é: R$ %d\n\n", valoringresso);
-               break;
-    }
-		case 5: 
-	printf ("Quinta-feira 05-Dez-2019\n\n");
-	printf ("\n\nO cliente possui benefício de meia entrada (1 - sim / 2 - nao) ?\n"); 
-scanf ("%d", &meiaentrada);
-        
-    switch (meiaentrada) 
-    {
-    case 1:
-        printf ("Sim.\nInsira o movito:\n(Não se esqueça de solicitar a documentação)");
-        printf ("\n\n(1) Maior de 60 anos\n\n(2)Professore da rede pÃºblica de ensino\n\n(3)CrianÃ§a de 02 a 12 anos\n\n\(4)Estudante\n");
-        scanf ("%d", &motivomeiabolsa);
-        valoringresso=valoringresso/2;
-        printf ("O valor do ingresso é: R$ %d\n\n", valoringresso);
-        break;
-        
-    case 2:
-        printf ("Não.\nprosseguindo...\n\n");
-                        printf ("O valor do ingresso é: R$ %d\n\n", valoringresso);
-               break;
-    }
-		case 6: 
-	printf ("Sexta-feira 06-Dez-2019\n\n");
-	printf ("\n\nO cliente possui benefício de meia entrada (1 - sim / 2 - nao) ?\n"); 
-scanf ("%d", &meiaentrada);
-        
-    switch (meiaentrada) 
-    {
-    case 1:
-        printf ("Sim.\nInsira o movito:\n(Não se esqueça de solicitar a documentação)");
-        printf ("\n\n(1) Maior de 60 anos\n\n(2)Professore da rede pÃºblica de ensino\n\n(3)CrianÃ§a de 02 a 12 anos\n\n\(4)Estudante\n");
-        scanf ("%d", &motivomeiabolsa);
-        valoringresso=valoringresso/2;
-        printf ("O valor do ingresso é: R$ %d\n\n", valoringresso);
-        break;
-        
-    case 2:
-        printf ("Não.\nprosseguindo...\n\n");
-                        printf ("O valor do ingresso é: R$ %d\n\n", valoringresso);
-               break;
-    }
-		case 7: 
-	printf ("Sábado 07-Dez-2019\n\n");
-	printf ("\n\nO cliente possui benefício de meia entrada (1 - sim / 2 - nao) ?\n"); 
-scanf ("%d", &meiaentrada);
-        
-    switch (meiaentrada) 
-    {
-    case 1:
-        printf ("Sim.\nInsira o movito:\n(Não se esqueça de solicitar a documentação)");
-        printf ("\n\n(1) Maior de 60 anos\n\n(2)Professore da rede pÃºblica de ensino\n\n(3)CrianÃ§a de 02 a 12 anos\n\n\(4)Estudante\n");
-        scanf ("%d", &motivomeiabolsa);
-        valoringresso=valoringresso/2;
-        printf ("O valor do ingresso é: R$ %d\n\n", valoringresso);
-        break;
-        
-    case 2:
-        printf ("Não.\nprosseguindo...\n\n");
-                        printf ("O valor do ingresso é: R$ %d\n\n", valoringresso);
-               break;
-    }
-	}
-
-
-     while(true){
-    	printf("\nEscolha:\n1 - Escolher Poltrona\n2 - Mostrar mapa de ocupação\n3 - Imprimir Ticket ");
-        scanf("%d", &opcao);    
-       
-       
-switch(opcao){
-	
-            case 1:
-                opcao = 0;
-                numero = 0 ;
-                lotado = 0;
-                
-                printf("\n1 - Frente\t2 - Fundo: \n");
-                scanf("%d", &opcao);
-                
-                printf("\nNúmero da poltrona (1 à 24): ");
-                scanf("%d", &numero);
-                
-                //primeiro verifica se o  esta lotado
-                for(i = 0; i<24; i++){
-                    if(assentoFrente[i] == 1 && assentoFundo[i] == 1){
-                        lotado++;
-                    }
-                    else{
-                        break;
-                    }
-                }
-                
-                //se a valor de lotado for menor que 24 ainda há assentos disponiveis
-                if(lotado<24){
-                    
-                    //assentos centro
-                    if(opcao == 1){
-                        //verifica se a poltrona pedida esta vazia
-                        if(assentoFrente[numero-1] == 0){
-                            //marca a poltrona como ocupada
-                            assentoFrente[numero-1] = 1;
-                            
-                            printf("\nVenda da poltrona número %d Efetivada\n", numero);
-                        }
-                        else{
-                            printf("\nA poltrona %d esta ocupada\n", numero);
-                        }
-                    }
-                    
-                    //assentos fundo
-                    else if(opcao == 2){
-                        //verifica se a poltrona pedida esta vazia
-                        if(assentoFundo[numero-1] == 0){
-                            //marca a poltrona como ocupada
-                            assentoFundo[numero-1] = 1;
-                            
-                            printf("\nVenda da poltrona número %d Efetivada\n", numero);
-                        }
-                        else{
-                            printf("\nA poltrona %d esta ocupada\n", numero);
-                        }
-                    }
-                }
-                else{
-                    printf("\nTeatro lotado\n");
-                }
-                
-                break;
-            
-                //mostra o mapa de assentos
-            case 2:
-                
-                //imprime o mapa das poltronas ocupadas
-                printf("\nDireita\tEsquerda\n");
-                
-                for(i = 0; i<24; i++){
-                    if(assentoFrente[i] == 0){
-                        printf("%d - Livvre\t", i+1);
-                    }else{
-                        printf("%d - Ocupada\t", i+1);
-                    }
-                    
-                    //assentos da fundo
-                    if(assentoFundo[i] == 0){
-                        printf("%d - Livvre\t", i+1);
-                    }else{
-                        printf("%d - Ocupada\t", i+1);
-                    }
-                    
-                  
-                    printf("\n");
-                }
-               
-                break;
-               
-            case 3:
-                printf(" \n\n\nTicket do Espetáculo Teatral Corpo de Dor\n\n poltrona= %d \t valor do ingresso %.d", numero, valoringresso);
-                printf("\n\n Data:");
-                exit(0);
-                break;
-                
-               
-       }                                              
-                
-    }   system("PAUSE");
+	system("PAUSE");
     return 0;
 }
 
+void choosePresentation() {
+	do {
+		printf("Escolha a peça entre as opções abaixo\n");
+		printf("\t1 - Espetáculo Teatral Corpo de Dor\n");
+		printf("\n");
+		scanf("%d", &presentation);
+		
+		if(isPresentationInRange()) {
+			setPresentationName();
+			setTicketPrice();
+			break;
+		} else {
+			printf("\n");
+			printf("Peça inexistente.\n");
+			printf("\n");
+		}
+	} while(!isPresentationInRange());
+}
 
+void showPresentationInfo() {
+	printf("\n");
+	printf("Espetáculo teatral %s\n", presentationName);
+	printf("Preço R$ %d\n", ticketPrice);
+	printf("\n");
+}
 
+void choosePresentationDate() {
+	do {
+		printf("Digite o número referente ao dia da semana que deseja comprar\n");
+		printf("\n");
+		printf("|~~~~~~~~~~~~~~~~~~~~~~~~~~~~|\n");
+		printf("| 1 - Domingo    01-Dez-2019 |\n");
+		printf("| 2 - Segunda    02-Dez-2019 |\n");
+		printf("| 3 - Terça      03-Dez-2019 |\n");
+		printf("| 4 - Quarta     04-Dez-2019 |\n");
+		printf("| 5 - Quinta     05-Dez-2019 |\n");
+		printf("| 6 - Sexta      06-Dez-2019 |\n");
+		printf("| 7 - Sábado     07-Dez-2019 |\n");
+		printf("|____________________________|\n");
+		printf("\n");
+		scanf("%d", &dayOfWeek);
+		
+		if(isDayOfWeekInRange()) {
+			setPresentationDate();
+			break;
+		} else {
+			printf("Escolha um dia da semana válido!\n");
+			printf("\n");
+		}
+	} while(!isDayOfWeekInRange());
+}
+
+void showPresentationDateInfo() {
+	printf("\n");
+	printf("%s\n", presentationDate);
+	printf("\n");
+}
+
+void askForBenefits() {
+	if(isTuesday()) {
+		askForGratuityBenefit();
+	} else {
+		askForHalfEntranceBenefit();
+	}
+}
+
+void showTicketPrice() {
+	printf("O valor do ingresso é R$ %d\n", ticketPrice);
+	printf("\n");
+}
+
+void showOptions() {
+	int option;
 	
+	do {
+		printf("\n");
+		printf("Escolha\n");
+		printf("\t1 - Escolher Poltrona\n");
+		printf("\t2 - Mostrar mapa de ocupação\n");
+		printf("\t3 - Imprimir Ticket\n");
+		scanf("%d", &option);
+		
+		if(isOptionInRange(option)) {
+			switch(option) {
+				case 1:
+					chooseSeat();
+  	              break;
+				case 2:
+					showSeatMap();
+    	            break;
+				case 3:
+					showTicket();
+ 	               break;
+			}
+		} else {
+			printf("Opção inexistente\n");
+			printf("\n");
+		}
+	} while(!isOptionInRange(option));
+}
 
+void askForGratuityBenefit() {
+	int haveGratuityBenefit;
+	
+	printf("O cliente possui benefício de Gratuidade de Ingresso? (1 - sim / 2 - nao)\n");
+	scanf("%d", &haveGratuityBenefit);
+	
+	do {
+		if(isGratuityBenefitInRange(haveGratuityBenefit)) {
+			switch(haveGratuityBenefit) {
+				case 1:
+					printf("OK, Benefício da Gratuidade foi aplicado.\n");
+					printf("\n");
+					
+					ticketPrice = 0;
+					break;
+				case 2:
+					printf("Não.\n");
+					printf("Prosseguindo...\n");
+					printf("\n");
+					
+					askForHalfEntranceBenefit();
+					break;
+			}
+		} else {
+			printf("Opção inexistente\n");
+			printf("\n");
+		}
+	} while(!isGratuityBenefitInRange(haveGratuityBenefit));
+}
+
+void askForHalfEntranceBenefit() {
+	int haveHalfEntranceBenefit;
+	
+	printf("\n");
+	printf("O cliente possui benefício de meia entrada? (1 - sim / 2 - nao)\n");
+	scanf("%d", &haveHalfEntranceBenefit);
+	
+	do {
+		if(isHalfEntranceBenefitInRange(haveHalfEntranceBenefit)) {
+			switch(haveHalfEntranceBenefit) {
+				case 1:
+					printf("Sim.\n");
+					printf("Insira o motivo.\n");
+					printf("Não esqueça de solicitar a documentação.\n");
+					printf("1 - Maior de 60 anos.\n");
+					printf("2 - Professor da rede pública de ensino.\n");
+					printf("3 - Criança de 2 à 12 anos.\n");
+					printf("4 - Estudante.\n");
+					scanf("%d", &halfEntranceReason);
+					
+					ticketPrice /= 2;
+					break;
+				case 2:
+					printf("Não.\n");
+					printf("Prosseguindo...\n");
+					printf("\n");
+					break;
+			}
+		} else {
+			printf("Opção inexistente\n");
+			printf("\n");
+		}
+	} while(!isHalfEntranceBenefitInRange(haveHalfEntranceBenefit));
+}
+
+void chooseSeat() {
+	if(isTheaterFull()) {
+		printf("\n");
+		printf("Teatro lotado.\n");
+	} else {
+		do {
+			printf("\n");
+			printf("Escolha sua fileira\n");
+			scanf("%d", &rowNumber);
+			
+			if(isRowNumberInRange()) {
+				do {
+					printf("\n");
+					printf("Número da poltrona (1 à 24)\n");
+					scanf("%d", &seatNumber);
+					
+					if(isSeatNumberInRange()) {
+						if(isSeatSelectedFree()) {
+							acceptPaymentOrder();
+						} else {
+							recusePaymentOrder();
+						}
+					} else {
+						printf("Assento inexistente\n");
+						printf("\n");
+					}
+				} while(!isSeatNumberInRange());
+			} else {
+				printf("Fileira inexistente\n");
+				printf("\n");
+			}
+		} while(!isRowNumberInRange());
+	}
+}
+
+void showSeatMap() {
+	for(int i = 0; i < MAX_SEAT_ROWS; i++) {
+		printf("Fileira %d\n", i+1);
+		
+		for(int j = 0; j < SEATS_PER_ROW; j++) {
+			if(isSeatOcuped(seatArray[i][j])) {
+				printf("\t%d - Ocupado\n", j+1);
+			} else {
+				printf("\t%d - Livre\n", j+1);
+			}
+		}
+		
+		printf("\n");
+	}
+}
+
+void showTicket() {
+	printf("\n");
+	printf("\n");
+	printf("Ticket do Espetáculo Teatral %s\n", presentationName);
+	printf("\n");
+	printf("Fileira %d\n", rowNumber);
+	printf("Poltrona %d\n", seatNumber);
+	printf("Valor do ingresso %d\n", ticketPrice);
+	printf("\n");
+	printf("Data %s\n", presentationDate);
+	printf("\n");
+}
+
+void acceptPaymentOrder() {
+	seatArray[rowNumber-1][seatNumber-1] = 1;
+	
+	printf("\n");
+	printf("Venda da poltrona %d - %d efetivada.\n", rowNumber, seatNumber);
+}
+
+void recusePaymentOrder() {
+	printf("\n");
+	printf("A poltrona %d - %d já está ocupada.\n", rowNumber, seatNumber);
+}
+
+void setPresentationName() {
+	switch(presentation) {
+		case 1:
+			presentationName = "Corpo de Dor";
+			break;
+	}
+}
+
+void setTicketPrice() {
+	switch(presentation) {
+		case 1:
+			ticketPrice = 30;
+			break;
+	}
+}
+
+void setPresentationDate() {
+	switch(dayOfWeek) {
+		case 1:
+			presentationDate = "Domingo 01-Dez-2019";
+			break;
+		case 2:
+			presentationDate = "Segunda-feira 02-Dez-2019";
+			break;
+	    case 3:
+			presentationDate = "Terça-feira 03-Dez-2019";
+			break;
+		case 4: 
+			presentationDate = "Quarta-feira 04-Dez-2019";
+			break;
+		case 5: 
+			presentationDate = "Quinta-feira 05-Dez-2019";
+			break;
+		case 6: 
+			presentationDate = "Sexta-feira 06-Dez-2019";
+			break;
+		case 7: 
+			presentationDate = "Sábado 07-Dez-2019";
+			break;
+	}
+}
+
+bool isPresentationInRange() {
+	return presentation > 0 && presentation <= MAX_PRESENTATIONS;
+}
+
+bool isDayOfWeekInRange() {
+	return dayOfWeek > 0 && dayOfWeek < 8;
+}
+
+bool isTuesday() {
+	return dayOfWeek == 3;
+}
+
+bool isOptionInRange(int option) {
+	return option > 0 && option < 4;
+}
+
+bool isGratuityBenefitInRange(int haveGratuityBenefit) {
+	return haveGratuityBenefit > 0 && haveGratuityBenefit < 3;
+}
+
+bool isHalfEntranceBenefitInRange(int haveHalfEntranceBenefit) {
+	return haveHalfEntranceBenefit > 0 && haveHalfEntranceBenefit < 3;
+}
+
+bool isRowNumberInRange() {
+	return rowNumber > 0 && rowNumber < MAX_SEAT_ROWS;
+}
+
+bool isSeatNumberInRange() {
+	return seatNumber > 0 && seatNumber < SEATS_PER_ROW;
+}
+
+bool isSeatSelectedFree() {
+	return seatArray[rowNumber-1][seatNumber-1] == 0;
+}
+
+bool isTheaterFull() {
+	int ocupedSeats = 0;
+	
+	for(int i = 0; i < MAX_SEAT_ROWS; i++) {
+		for(int j = 0; j < SEATS_PER_ROW; j++) {
+			if(isSeatOcuped(seatArray[i][j])) {
+				ocupedSeats++;
+			}
+		}
+	}
+	
+	return (MAX_SEAT_ROWS * SEATS_PER_ROW) < ocupedSeats;
+}
+
+bool isSeatOcuped(int seat) {
+	return seat == 1;
+}
